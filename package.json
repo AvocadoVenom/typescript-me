@@ -36,7 +36,7 @@
       "@vue/typescript/recommended"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {}
   },

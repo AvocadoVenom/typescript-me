@@ -23,74 +23,80 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+
 import CustomSelect from "@/components/CustomSelect.vue";
 import NotificationBanner from "@/components/NotificationBanner.vue";
+import { Notification, NotificationType } from "./models/notification-models";
 
-export default {
+export enum Reason {
+  IMPROVE_SKILLS = "I want to improve my skills",
+  TOPPINGS = "I love toppings... Typings I mean!",
+  READY_FOR_CHALLENGES = "I'm always ready for new challenges",
+  YOU_NEED_CLEAR_CODE = "You need a clear and concise code right now"
+}
+
+export enum ProjectAnswer {
+  ANGRY_NO = "How dare you! This is an awesome opportunity to increase your skills and make me cleaner and robust!",
+  ANGRY_SELFISH = "How selfish you are! Don't you even care about my code!? [Try again]",
+  ANSWER_TOPPINGS = "This challenge is not a joke, take it seriously!!! [Try again]",
+  GO_TO_WORK = "I'm glad to hear it! Let's get to work"
+}
+
+export default Vue.extend({
   name: "App",
   components: {
     CustomSelect,
     NotificationBanner
   },
   data: () => ({
-    dare: null,
-    notification: null,
-    opportunities: [
-      "I want to improve my skills",
-      "I love toppings... Typings I mean!",
-      "I'm always ready for new challenges",
-      "You need a clear and concise code right now"
-    ],
+    dare: (null as unknown) as () => boolean | null,
+    notification: null as Notification | null,
+    opportunities: Object.values(Reason),
     selectedReason: ""
   }),
   watch: {
-    dare: function(accept) {
+    dare: function(accept: boolean) {
       if (accept) {
         this.notification = null;
       } else {
         this.notification = {
-          type: "danger",
-          message:
-            "How dare you! This is an awesome opportunity to increase your skills and make me cleaner and robust!",
+          type: NotificationType.DANGER,
+          message: ProjectAnswer.ANGRY_NO,
           duration: 5000
-        };
+        } as Notification;
       }
     },
-    selectedReason: function(reason) {
-      if ("I love toppings... Typings I mean!" === reason) {
+    selectedReason: function(reason: Reason) {
+      if (Reason.TOPPINGS === reason) {
         this.notification = {
-          type: "danger",
-          message:
-            "This challenge is not a joke, take it seriously!!! [Try again]",
+          type: NotificationType.DANGER,
+          message: ProjectAnswer.ANSWER_TOPPINGS,
           duration: 5000
-        };
-        setTimeout(() => (this.selectedReason = null), 5000);
+        } as Notification;
+        setTimeout(() => (this.selectedReason = ""), 5000);
       } else if (
-        [
-          "I want to improve my skills",
-          "I'm always ready for new challenges"
-        ].includes(reason)
+        [Reason.IMPROVE_SKILLS, Reason.READY_FOR_CHALLENGES].includes(reason)
       ) {
         this.notification = {
-          type: "warning",
-          message:
-            "How selfish you are! Don't you even care about my code!? [Try again]",
+          type: NotificationType.WARNING,
+          message: ProjectAnswer.ANGRY_SELFISH,
           duration: 5000
         };
-        setTimeout(() => (this.selectedReason = null), 5000);
-      } else if ("You need a clear and concise code right now" === reason) {
+        setTimeout(() => (this.selectedReason = ""), 5000);
+      } else if (Reason.YOU_NEED_CLEAR_CODE === reason) {
         this.notification = {
-          type: "success",
-          message: "I'm glad to hear it! Let's get to work",
+          type: NotificationType.SUCCESS,
+          message: ProjectAnswer.GO_TO_WORK,
           duration: 5000
-        };
+        } as Notification;
       } else {
         this.notification = null;
       }
     }
   }
-};
+});
 </script>
 
 <style>

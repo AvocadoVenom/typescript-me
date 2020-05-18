@@ -1,6 +1,6 @@
 <template>
   <div class="select-container">
-    <label for="reason" v-if="label" style="margin-right: 10px">{{
+    <label for="reason" v-if="label" style="margin-right: 10px;">{{
       label
     }}</label>
     <select
@@ -22,8 +22,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "CustomSelect",
   model: {
     prop: "value",
@@ -39,11 +41,11 @@ export default {
       default: null
     },
     reasons: {
-      type: Array,
+      type: (Array as unknown) as () => string[],
       required: true
     }
   }
-};
+});
 </script>
 
 <style scoped>

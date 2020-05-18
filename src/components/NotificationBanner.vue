@@ -4,9 +4,9 @@
       v-if="displayed"
       class="notification"
       :class="{
-        'notification-danger': data.type === 'danger',
-        'notification-warning': data.type === 'warning',
-        'notification-success': data.type === 'success'
+        'notification-danger': data.type === NotificationType.DANGER,
+        'notification-warning': data.type === NotificationType.WARNING,
+        'notification-success': data.type === NotificationType.SUCCESS
       }"
     >
       <div class="notification-message">
@@ -16,28 +16,33 @@
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+import { Notification, NotificationType } from "@/models/notification-models";
+
+export default Vue.extend({
   name: "NotificationBanner",
   props: {
     data: {
-      type: Object,
+      type: (Object as unknown) as () => Notification,
       required: true
     }
   },
   data: () => ({
-    displayed: false
+    displayed: false,
+    NotificationType
   }),
   mounted() {
     this.displayNotification(this.data);
   },
   watch: {
-    data: function(newData) {
+    data: function(newData: Notification) {
       this.displayNotification(newData);
     }
   },
   methods: {
-    displayNotification(n) {
+    displayNotification(n: Notification) {
       this.displayed = true;
       if (n.duration) {
         setTimeout(() => {
@@ -46,7 +51,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

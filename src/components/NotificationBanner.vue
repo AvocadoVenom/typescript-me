@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue, { PropType } from "vue";
 
 import { Notification, NotificationType } from "@/models/notification-models";
 
@@ -25,7 +25,7 @@ export default Vue.extend({
   name: "NotificationBanner",
   props: {
     data: {
-      type: (Object as unknown) as () => Notification,
+      type: Object as PropType<Notification>,
       required: true
     }
   },
